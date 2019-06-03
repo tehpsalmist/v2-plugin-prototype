@@ -30,6 +30,16 @@ export const znFiltersPanel = (options, callback) => {
   client.call('filtersPanel', { options }, callback, Infinity)
 }
 
+export const znLocalStorage = (method, key, item, callback) => {
+  console.log('calling znLocalStorage')
+  client.call('znLocalStorage', { method, key, item }, callback)
+}
+
+export const znResize = dimensions => {
+  console.log('calling znResize')
+  client.call('resize', { dimensions })
+}
+
 // client.subscribe('item', (result, error) => {
 //   console.log(result)
 // })

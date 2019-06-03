@@ -3,7 +3,7 @@ import logo from './logo.svg'
 import './App.css'
 
 import { useSubscription } from './hooks'
-import { getMe, znConfirm, znMessage, znModal, znFiltersPanel } from './post-rpc'
+import { getMe, znConfirm, znMessage, znModal, znFiltersPanel, znLocalStorage, znResize } from './post-rpc'
 
 const App = props => {
   const [avatar, setAvatar] = useState(logo)
@@ -11,6 +11,8 @@ const App = props => {
   const [timezone, setTimezone] = useState('')
   const [lastLogin, setLastLogin] = useState('')
   const [items, setItems] = useState([])
+  const [x, setX] = useState('')
+  const [y, setY] = useState('')
 
   useSubscription('item', (item, err) => {
     if (err) return console.error(err)
@@ -38,6 +40,10 @@ const App = props => {
 
   const filtersPanelButton = () => znFiltersPanel({ workspaceId: 3, formId: 4 }, something => console.log(something, 'hey!'))
 
+  const storeStuff = () => znLocalStorage('get', 'mykey', '45', (val, err) => console.log('val,', val, err))
+
+  const resize = () => znResize({ x, y })
+
   return (
     <div className='App'>
       <header className='App-header'>
@@ -47,6 +53,16 @@ const App = props => {
         <button onClick={messageButton}>znMessage</button>
         <button onClick={modalButton}>znModal</button>
         <button onClick={filtersPanelButton}>znFiltersPanel</button>
+        <button onClick={storeStuff}>Local Storage</button>
+        <label>
+          Frame Width:{' '}
+          <input value={x} onChange={({ target: { value } }) => setX(value)} />
+        </label>
+        <label>
+          Frame Height:{' '}
+          <input value={y} onChange={({ target: { value } }) => setY(value)} />
+        </label>
+        <button onClick={resize}>Resize</button>
         {!name && <button onClick={fetchUser}>Get User Info</button>}
         {name && <div>
           <p>Name: {name}</p>
